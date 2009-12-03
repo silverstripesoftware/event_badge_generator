@@ -24,7 +24,7 @@
 #  siddharta at silverstripesoftware dot com
 #
 
-import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFont
 from csvimport import CsvReader
 
 class BadgeImage(object):
@@ -93,27 +93,27 @@ class DataFileReader(object):
         fp.close()
 
     def getData(self):
-    reader = CsvReader(self.content)
-    reader.setColumnAlias(0, "fname")
-    reader.setColumnAlias(1, "lname")
-    reader.setColumnAlias(2, "company")
-    reader.setColumnAlias(3, "id")
-    for row in reader.rows():
-        name = row.fname + " " + row.lname
-        company = row.company
-        id = row.id
-        name = name.title()
-        # For company names that start with * we dont convert
-        # to title case. This is helpful for acronym names.
-        # Eg: IBM should not become Ibm, so we mark it as *IBM
-        # in the file
-        if not company.startswith("*"):
-            company = company.title()
-        else:
-            # If name starts with * then remove the star and
-            # take the rest as the company name
-            company = company[1:]
-        yield (id, name.title(), company)
+        reader = CsvReader(self.content)
+        reader.setColumnAlias(0, "fname")
+        reader.setColumnAlias(1, "lname")
+        reader.setColumnAlias(2, "company")
+        reader.setColumnAlias(3, "id")
+        for row in reader.rows():
+            name = row.fname + " " + row.lname
+            company = row.company
+            id = row.id
+            name = name.title()
+            # For company names that start with * we dont convert
+            # to title case. This is helpful for acronym names.
+            # Eg: IBM should not become Ibm, so we mark it as *IBM
+            # in the file
+            if not company.startswith("*"):
+                company = company.title()
+            else:
+                # If name starts with * then remove the star and
+                # take the rest as the company name
+                company = company[1:]
+            yield (id, name.title(), company)
 
 import sys
 
